@@ -18,8 +18,10 @@
 
 package it.gmariotti.cardslib.library.internal.dismissanimation;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.AnimatorListenerAdapter;
+import com.nineoldandroids.view.ViewPropertyAnimator;
+
 import android.content.Context;
 
 import it.gmariotti.cardslib.library.internal.Card;
@@ -44,7 +46,7 @@ public class SwipeDismissAnimation extends BaseDismissAnimation {
     @Override
     public void animate(final Card card, final CardView cardView) {
 
-        cardView.animate()
+        ViewPropertyAnimator.animate(cardView)
                 .translationX(mDismissRight ? mListWidth : -mListWidth)
                 .alpha(0)
                 .setDuration(mAnimationTime)

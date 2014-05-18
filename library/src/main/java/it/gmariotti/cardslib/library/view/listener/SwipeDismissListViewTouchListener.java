@@ -18,9 +18,10 @@
 
 package it.gmariotti.cardslib.library.view.listener;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.AnimatorListenerAdapter;
+import com.nineoldandroids.animation.ValueAnimator;
+import com.nineoldandroids.view.ViewPropertyAnimator;
 import android.graphics.Rect;
 import android.os.SystemClock;
 import android.view.MotionEvent;
@@ -28,7 +29,6 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
@@ -257,7 +257,7 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
 
                 } else {
                     // cancel
-                    mDownView.animate()
+                    ViewPropertyAnimator.animate(mDownView)
                             .translationX(0)
                             .alpha(1)
                             .setDuration(mAnimationTime)
@@ -286,7 +286,7 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
 
                 if (mDownView != null) {
                     // cancel
-                    mDownView.animate()
+                    ViewPropertyAnimator.animate(mDownView)
                             .translationX(0)
                             .alpha(1)
                             .setDuration(mAnimationTime)
@@ -346,7 +346,7 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
             return;
         }
 
-        view.animate()
+        ViewPropertyAnimator.animate(view)
                 .translationX(dismissRight ? mViewWidth : -mViewWidth)
                 .alpha(0)
                 .setDuration(mAnimationTime)

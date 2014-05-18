@@ -18,8 +18,10 @@
 
 package it.gmariotti.cardslib.library.internal.base;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Build;
 import android.view.View;
 import android.widget.CursorAdapter;
 
@@ -65,6 +67,7 @@ public abstract class BaseCardCursorAdapter extends CursorAdapter {
     }
 
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     protected BaseCardCursorAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
         mContext = context;

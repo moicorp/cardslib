@@ -19,9 +19,12 @@
 
 package it.gmariotti.cardslib.library.view.listener;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.AnimatorListenerAdapter;
+import com.nineoldandroids.animation.ValueAnimator;
+import com.nineoldandroids.view.ViewHelper;
+import com.nineoldandroids.view.ViewPropertyAnimator;
+
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -165,8 +168,7 @@ public class SwipeDismissViewTouchListener implements View.OnTouchListener {
                 }
                 if (dismiss) {
                     // dismiss
-
-                    mCardView.animate()
+                    ViewPropertyAnimator.animate(mCardView)
                             .translationX(dismissRight ? mViewWidth : -mViewWidth)
                             .alpha(0).setDuration(mAnimationTime)
                             .setListener(new AnimatorListenerAdapter() {
@@ -177,7 +179,7 @@ public class SwipeDismissViewTouchListener implements View.OnTouchListener {
                             });
                 } else {
                     // cancel
-                    mCardView.animate().translationX(0).alpha(1)
+                    ViewPropertyAnimator.animate(mCardView).translationX(0).alpha(1)
                             .setDuration(mAnimationTime).setListener(null);
                 }
                 mVelocityTracker.recycle();
@@ -238,8 +240,8 @@ public class SwipeDismissViewTouchListener implements View.OnTouchListener {
 
                 mCallbacks.onDismiss(mCardView,mToken);
                 // Reset view presentation
-                mCardView.setAlpha(1f);
-                mCardView.setTranslationX(0);
+                ViewHelper.setAlpha(mCardView, 1f);
+                ViewHelper.setTranslationX(mCardView, 0);
                 //ViewGroup.LayoutParams lp = mCardView.getLayoutParams();
                 lp.height = originalHeight;
                 mCardView.setLayoutParams(lp);

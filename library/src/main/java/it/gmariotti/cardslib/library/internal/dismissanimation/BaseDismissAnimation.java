@@ -18,9 +18,11 @@
 
 package it.gmariotti.cardslib.library.internal.dismissanimation;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.AnimatorListenerAdapter;
+import com.nineoldandroids.animation.ValueAnimator;
+import com.nineoldandroids.view.ViewHelper;
+
 import android.content.Context;
 import android.os.SystemClock;
 import android.view.MotionEvent;
@@ -252,8 +254,8 @@ public abstract class BaseDismissAnimation {
                     ViewGroup.LayoutParams lp;
                     for (PendingDismissData pendingDismiss : mPendingDismisses) {
                         // Reset view presentation
-                        pendingDismiss.view.setAlpha(1f);
-                        pendingDismiss.view.setTranslationX(0);
+                        ViewHelper.setAlpha(pendingDismiss.view, 1f);
+                        ViewHelper.setTranslationX(pendingDismiss.view, 0);
                         lp = pendingDismiss.view.getLayoutParams();
                         lp.height = 0;
                         pendingDismiss.view.setLayoutParams(lp);

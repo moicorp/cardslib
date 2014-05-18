@@ -18,6 +18,7 @@
 
 package it.gmariotti.cardslib.library.view.component;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -30,7 +31,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.LruCache;
+import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -187,6 +188,7 @@ public class CardThumbnailView extends FrameLayout implements CardViewInterface 
         if (mMemoryCache==null){
             mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
 
+                @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
                 @Override
                 protected int sizeOf(String key, Bitmap bitmap) {
                     // The cache size will be measured in kilobytes rather than
