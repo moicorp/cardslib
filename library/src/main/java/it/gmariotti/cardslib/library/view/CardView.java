@@ -952,13 +952,14 @@ public class CardView extends BaseCardView {
      *
      * @param drawableResource drawable resource
      */
+    @SuppressWarnings("deprecation")
     public void changeBackgroundResource(Drawable drawableResource) {
         if (drawableResource!=null){
             if (mInternalMainCardLayout!=null){
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-                    mInternalMainCardLayout.setBackground(drawableResource);
-                else
+                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
                     mInternalMainCardLayout.setBackgroundDrawable(drawableResource);
+                else
+                    mInternalMainCardLayout.setBackground(drawableResource);
             }
         }
     }

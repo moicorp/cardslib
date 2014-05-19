@@ -701,6 +701,7 @@ public class Card extends BaseCard {
      * @param area
      * @param onClickListener
      */
+    @SuppressWarnings("unchecked")
     public void addPartialOnClickListener(int area, OnCardClickListener onClickListener) {
 
         if (area < CLICK_LISTENER_ALL_VIEW && area > CLICK_LISTENER_CONTENT_VIEW)
