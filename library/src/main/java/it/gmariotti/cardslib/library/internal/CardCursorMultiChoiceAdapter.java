@@ -1,8 +1,10 @@
 package it.gmariotti.cardslib.library.internal;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Build;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.View;
@@ -19,6 +21,7 @@ import it.gmariotti.cardslib.library.internal.multichoice.OptionMultiChoice;
 import it.gmariotti.cardslib.library.view.CardListView;
 import it.gmariotti.cardslib.library.view.CardView;
 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public abstract class CardCursorMultiChoiceAdapter extends CardCursorAdapter implements MultiChoiceAdapter, AbsListView.MultiChoiceModeListener {
 
     /**

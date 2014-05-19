@@ -18,8 +18,10 @@
 
 package it.gmariotti.cardslib.library.internal;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.View;
@@ -38,6 +40,7 @@ import it.gmariotti.cardslib.library.view.CardView;
 /**
  * @author Gabriele Mariotti (gabri.mariotti@gmail.com)
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public abstract class CardArrayMultiChoiceAdapter extends CardArrayAdapter implements MultiChoiceAdapter, AbsListView.MultiChoiceModeListener {
 
     /**

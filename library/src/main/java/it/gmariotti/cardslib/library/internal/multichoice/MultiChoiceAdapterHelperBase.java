@@ -22,8 +22,10 @@ package it.gmariotti.cardslib.library.internal.multichoice;
  * @author Gabriele Mariotti (gabri.mariotti@gmail.com)
  */
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.res.Resources;
+import android.os.Build;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -39,6 +41,7 @@ import it.gmariotti.cardslib.library.R;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.view.CardView;
 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class MultiChoiceAdapterHelperBase implements AdapterView.OnItemLongClickListener,AdapterView.OnItemClickListener {
 
     protected static final String TAG = MultiChoiceAdapterHelperBase.class.getSimpleName();
