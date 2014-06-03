@@ -23,7 +23,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Build;
 import android.view.View;
-import android.widget.CursorAdapter;
+import android.support.v4.widget.CursorAdapter;
 
 import it.gmariotti.cardslib.library.R;
 import it.gmariotti.cardslib.library.internal.Card;
