@@ -24,6 +24,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +35,8 @@ import it.gmariotti.cardslib.library.R;
 import it.gmariotti.cardslib.library.internal.base.BaseCardCursorAdapter;
 import it.gmariotti.cardslib.library.view.CardListView;
 import it.gmariotti.cardslib.library.view.CardView;
+import it.gmariotti.cardslib.library.view.listener.SwipeDismissListViewTouchListener;
+import it.gmariotti.cardslib.library.view.listener.SwipeOnScrollListener;
 
 /**
  * Cursor Adapter for {@link it.gmariotti.cardslib.library.internal.Card} model
@@ -51,10 +55,9 @@ public abstract class CardCursorAdapter extends BaseCardCursorAdapter  {
     protected CardListView mCardListView;
 
     /**
-     * Internal Map with all Cards.
-     * It uses the card id value as key.
+     * Listener invoked when a card is swiped
      */
-    protected HashMap<String /* id */,Card>  mInternalObjects;
+    protected SwipeDismissListViewTouchListener mOnTouchListener;
 
 
     /**
@@ -133,9 +136,9 @@ public abstract class CardCursorAdapter extends BaseCardCursorAdapter  {
                 mCardView.setCard(mCard);
 
                 //Set originalValue
-                //mCard.setSwipeable(origianlSwipeable);
-                if (origianlSwipeable)
-                    Log.d(TAG, "Swipe action not enabled in this type of view");
+                mCard.setSwipeable(origianlSwipeable);
+//                if (origianlSwipeable)
+//                    Log.d(TAG, "Swipe action not enabled in this type of view");
 
                 //If card has an expandable button override animation
                 if ((mCard.getCardHeader() != null && mCard.getCardHeader().isButtonExpandVisible()) || mCard.getViewToClickToExpand()!=null ){
@@ -160,7 +163,29 @@ public abstract class CardCursorAdapter extends BaseCardCursorAdapter  {
      */
     protected void setupSwipeableAnimation(final Card card, CardView cardView) {
 
-        cardView.setOnTouchListener(null);
+        if (card.isSwipeable()){
+            if (mOnTouchListener == null){
+                mOnTouchListener = new SwipeDismissListViewTouchListener(mCardListView, mCallback);
+                // Setting this scroll listener is required to ensure that during
+                // ListView scrolling, we don't look for swipes.
+                if (mCardListView.getOnScrollListener() == null){
+                    SwipeOnScrollListener scrollListener = new SwipeOnScrollListener();
+                    scrollListener.setTouchListener(mOnTouchListener);
+                    mCardListView.setOnScrollListener(scrollListener);
+                }else{
+                    AbsListView.OnScrollListener onScrollListener=mCardListView.getOnScrollListener();
+                    if (onScrollListener instanceof SwipeOnScrollListener)
+                        ((SwipeOnScrollListener) onScrollListener).setTouchListener(mOnTouchListener);
+
+                }
+
+                mCardListView.setOnTouchListener(mOnTouchListener);
+            }
+            cardView.setOnTouchListener(mOnTouchListener);
+        }else{
+            //prevent issue with recycle view
+            cardView.setOnTouchListener(null);
+        }
     }
 
     /**
@@ -174,6 +199,48 @@ public abstract class CardCursorAdapter extends BaseCardCursorAdapter  {
         cardView.setOnExpandListAnimatorListener(mCardListView);
     }
 
+    // -------------------------------------------------------------
+    //  SwipeListener and undo action
+    // -------------------------------------------------------------
+    /**
+     * Listener invoked when a card is swiped
+     */
+    SwipeDismissListViewTouchListener.DismissCallbacks mCallback = new SwipeDismissListViewTouchListener.DismissCallbacks() {
+
+        @Override
+        public boolean canDismiss(int position, Card card) {
+            return card.isSwipeable();
+        }
+
+        @Override
+        public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+
+            int[] itemPositions=new int[reverseSortedPositions.length];
+            String[] itemIds=new String[reverseSortedPositions.length];
+            int i=0;
+
+            //Remove cards and notifyDataSetChanged
+            for (int position : reverseSortedPositions) {
+                Card card = getItem(position);
+                itemPositions[i]=position;
+                itemIds[i]=card.getId();
+                i++;
+
+                /*
+                if (card.isExpanded()){
+                    if (card.getCardView()!=null && card.getCardView().getOnExpandListAnimatorListener()!=null){
+                        //There is a List Animator.
+                        card.getCardView().getOnExpandListAnimatorListener().onCollapseStart(card.getCardView(), card.getCardView().getInternalExpandLayout());
+                    }
+                }*/
+//                remove(card);
+                if (card.getOnSwipeListener() != null){
+                    card.getOnSwipeListener().onSwipe(card);
+                }
+            }
+//            notifyDataSetChanged();
+        }
+    };
 
     // -------------------------------------------------------------
     //  Expanded
